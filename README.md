@@ -45,10 +45,10 @@ Dataset yang digunakan merupakan data gambar hewan: dogs, cats, snakes dengan at
 - Jumlah gambar cats = 1000 gambar
 - Jumlah gambar snakes = 1000 gambar
 
-![ss4](Gambar/hewan.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/hewan.png)
 
 **Plot Distribusi Untuk Semua Kelas**
-![ss4](Gambar/grafik.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/grafik.png)
 ---
 
 ### Exploratory Data Analysis (EDA)
@@ -68,7 +68,7 @@ transformations = {
 
 Lalu kita akan memisahkan data asli dengan data yang telah di augmentasi
 
-![ss4](Gambar/distribusi.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/distribusi.png)
 
 
 ---
@@ -160,13 +160,13 @@ accuracy: 0.9121 - loss: 0.1624 - val_accuracy: 0.9583 - val_loss: 0.2578
 **Conv2D**
 
 Visual Accuracy
-![ss4](Gambar/visual acc.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/visual%20acc.png)
 
 Visual Loss
-![ss4](Gambar/gambar-visual.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/gambar-visual.png)
 
 Visual Correlation Matrix
-![ss4](Gambar/matrix conv.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrix%20conv.png)
 
 Classification Report:
 
@@ -184,13 +184,13 @@ weighted avg     0.6653    0.6500    0.6402       720
 **Transfer Learning**
 
 Visual Accuracy
-![ss4](Gambar/acc tf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/acc%20tf.png)
 
 Visual Loss
-![ss4](Gambar/loss tf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/loss%20tf.png)
 
 Visual Correlation Matrix
-![ss4](Gambar/matrix tf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrix%20tf.png)
 
 Classification Report:
 
@@ -239,5 +239,5 @@ Kemudian hasil konversi akan disimpan ke dalam folder files.download('koko_model
 
 Hasil inference diuji menggunakan website
 
-![ss4](Gambar/inference.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/inference.png)
 
