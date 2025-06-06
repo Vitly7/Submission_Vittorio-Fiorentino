@@ -5,33 +5,35 @@
 
 ## Domain Proyek
 
-Pergerakan harga saham menjadi aspek penting dalam dunia keuangan, baik bagi investor individu maupun institusional. Dalam era digital saat ini, prediksi harga saham berbasis data menjadi semakin diminati karena mampu memberikan insight untuk pengambilan keputusan yang lebih akurat. Dengan meningkatnya volume data keuangan dan kemampuan komputasi, pemanfaatan machine learning untuk menganalisis pola harga saham menjadi solusi potensial yang efektif dan efisien.
+Klasifikasi gambar merupakan salah satu aplikasi penting dalam bidang visi komputer, di mana sistem mampu mengenali dan mengelompokkan objek dari gambar secara otomatis. Dalam dunia nyata, kemampuan untuk membedakan jenis hewan seperti anjing (dog), kucing (cat), dan ular (snake) bisa sangat berguna, misalnya untuk aplikasi keamanan, pemantauan hewan liar, atau sistem pencarian otomatis berbasis gambar.
 
-Menurut [Fischer & Krauss, 2018], model deep learning seperti LSTM dapat mengalahkan model tradisional dalam prediksi harga saham harian. Hal ini memperkuat urgensi dan relevansi topik ini dalam konteks bisnis dan teknologi modern.
-
+Dengan kemajuan teknologi deep learning, terutama penggunaan Convolutional Neural Networks (CNN), performa klasifikasi gambar telah meningkat secara signifikan. CNN mampu mengekstraksi fitur visual kompleks secara otomatis tanpa perlu ekstraksi fitur manual seperti pada metode tradisional. Model-model ini telah terbukti efektif dalam tugas-tugas klasifikasi gambar, termasuk pengenalan hewan.
 
 ---
 
 ## Business Understanding
 
 ### Problem Statements
+Bagaimana membangun model klasifikasi gambar untuk membedakan antara anjing, kucing, dan ular?
 
-1. Bagaimana memprediksi harga penutupan saham berdasarkan data historis harga saham?
-2. Model machine learning mana yang memberikan performa terbaik dalam memprediksi harga saham?
+Algoritma deep learning mana yang memberikan performa terbaik dalam klasifikasi gambar hewan ini?
 
 ### Goals
+Mengembangkan model klasifikasi gambar yang mampu mengenali jenis hewan dari gambar input (dog, cat, snake).
 
-1. Menghasilkan model yang mampu memprediksi harga saham berdasarkan fitur-fitur seperti Open, High, Low, dan Volume.
-2. Membandingkan beberapa algoritma machine learning untuk mengetahui performa terbaik.
+Membandingkan performa beberapa arsitektur deep learning seperti Conv2D dan transfer learning.
 
 ### Solution Statement
 
-Untuk mencapai tujuan di atas, digunakan tiga algoritma machine learning, yaitu:
-- K-Nearest Neighbors (KNN)
-- Random Forest (RF)
-- Gradient Boosting
+Untuk menyelesaikan permasalahan klasifikasi gambar hewan ini, digunakan dua pendekatan berbasis deep learning, yaitu:
 
-Evaluasi model dilakukan menggunakan Root Mean Squared Error (RMSE) pada data pelatihan dan pengujian.
+Model CNN dengan Conv2D:
+Model dibuat dari awal menggunakan layer Conv2D, MaxPooling, Flatten, dan Dense. Pendekatan ini memungkinkan pemahaman mendalam terhadap proses training dan ekstraksi fitur dari gambar. Model ini akan dilatih dengan data gambar anjing, kucing, dan ular untuk mengenali pola visual khas dari masing-masing kelas.
+
+Transfer Learning:
+Menggunakan arsitektur pretrained seperti MobileNetV2 atau ResNet50, model memanfaatkan bobot hasil pelatihan pada dataset besar (misalnya ImageNet) untuk mengekstraksi fitur. Layer atas (fully connected) disesuaikan dengan klasifikasi 3 kelas (dog, cat, snake). Transfer learning mempercepat pelatihan dan meningkatkan akurasi, terutama saat data training terbatas.
+
+Evaluasi kedua model dilakukan menggunakan akurasi, precision, recall, dan F1-score pada data pengujian, untuk mengetahui pendekatan mana yang paling efektif dalam mengklasifikasikan gambar hewan.
 
 
 ---
@@ -43,6 +45,10 @@ Dataset yang digunakan merupakan data gambar hewan: dogs, cats, snakes dengan at
 - Jumlah gambar cats = 1000 gambar
 - Jumlah gambar snakes = 1000 gambar
 
+![ss4](Gambar/hewan.png)
+
+**Plot Distribusi Untuk Semua Kelas**
+![ss4](Gambar/grafik.png)
 ---
 
 ### Exploratory Data Analysis (EDA)
@@ -61,6 +67,8 @@ transformations = {
 - Proses augmentasi berguna untuk memproses gambar agar memudahkan dalam proses analisa
 
 Lalu kita akan memisahkan data asli dengan data yang telah di augmentasi
+
+![ss4](Gambar/distribusi.png)
 
 
 ---
@@ -99,6 +107,8 @@ train  cats                812
        snakes              811
        snakes_augmented    154
 
+---
+
 ### Image Data Generator
 
 **Membuat path untuk masing-masing kelas:**
@@ -125,6 +135,7 @@ Total number of snake images in test set:  235
 Found 2305 images belonging to 3 classes.
 Found 575 images belonging to 3 classes.
 Found 720 images belonging to 3 classes.
+
 ---
 
 ## Modeling
@@ -148,31 +159,85 @@ accuracy: 0.9121 - loss: 0.1624 - val_accuracy: 0.9583 - val_loss: 0.2578
 
 **Conv2D**
 
+Visual Accuracy
+![ss4](Gambar/visual acc.png)
 
+Visual Loss
+![ss4](Gambar/gambar-visual.png)
 
+Visual Correlation Matrix
+![ss4](Gambar/matrix conv.png)
+
+Classification Report:
+
+              precision    recall  f1-score   support
+
+        cats     0.6174    0.6017    0.6094       236
+        dogs     0.7484    0.4779    0.5833       249
+      snakes     0.6254    0.8809    0.7314       235
+
+    accuracy                         0.6500       720
+   macro avg     0.6637    0.6535    0.6414       720
+weighted avg     0.6653    0.6500    0.6402       720
+
+---
 **Transfer Learning**
 
+Visual Accuracy
+![ss4](Gambar/acc tf.png)
 
+Visual Loss
+![ss4](Gambar/loss tf.png)
 
-### Hasil Pengujian Data
+Visual Correlation Matrix
+![ss4](Gambar/matrix tf.png)
 
-|    y_true     | prediksi_KNN   | prediksi_RF  | prediksi_Boosting |
-| 	            |                |              |                   |   
-|   270000.0    |   318473.2     |   320560.6   |    382082.5       |
+Classification Report:
 
-Evaluasi Akurasi Prediksi:
+              precision    recall  f1-score   support
 
-Hasil Asli = 270000
+        cats     0.9170    0.8898    0.9032       236
+        dogs     0.8509    0.9398    0.8931       249
+      snakes     0.9907    0.9106    0.9490       235
 
-- KNN 334973 -> Cukup dekat
-- RandomForest 324502.9 -> Paling dekat
-- Boosting 383839.0 -> Cukup jauh dari aslinya
+    accuracy                         0.9139       720
+   macro avg     0.9196    0.9134    0.9151       720
+weighted avg     0.9182    0.9139    0.9147       720
+
 
 ---
 
-### Kesimpulan:
-- Semua model cukup baik kali ini, terutama Random Forest yang prediksinya hampir identik dengan nilai sebenarnya.
+### Hasil Pengujian Data
 
-- Model Boosting cenderung underestimate (meremehkan nilai).
 
-- KNN juga cukup akurat, hanya sedikit lebih tinggi.
+Evaluasi Akurasi Prediksi:
+
+Dengan modelling Conv2D awalnya mendapat accuracy yang cukup rendah, tetapi saat menggunakan pendekatan transfer learning, nilai accuracy meningkat menjadi 0.9121
+
+- Conv2D
+
+accuracy: 0.6574 - loss: 0.6931 - val_accuracy: 0.6957 - val_loss: 0.6488
+
+- Transfer Learning
+
+accuracy: 0.9121 - loss: 0.1624 - val_accuracy: 0.9583 - val_loss: 0.2578
+
+
+---
+
+### Konversi Model
+
+- Format SavedModel
+- Format TFJS
+- Format TF-Lite
+
+Kemudian hasil konversi akan disimpan ke dalam folder files.download('koko_model_all.zip')
+
+---
+
+### Inference
+
+Hasil inference diuji menggunakan website
+
+![ss4](Gambar/inference.png)
+
