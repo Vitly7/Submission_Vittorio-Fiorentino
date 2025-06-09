@@ -39,16 +39,27 @@ Evaluasi kedua model dilakukan menggunakan akurasi, precision, recall, dan F1-sc
 ---
 
 ## Data Understanding
+
+- Sumber Data: https://www.kaggle.com/datasets/borhanitrash/animal-image-classification-dataset
+
 Dataset diperoleh dari kaggle dan langsung diimport: animal-image-classification-dataset.zip
+
 Dataset yang digunakan merupakan data gambar hewan: dogs, cats, snakes dengan atribut:
 - Jumlah gambar dogs = 1000 gambar
 - Jumlah gambar cats = 1000 gambar
 - Jumlah gambar snakes = 1000 gambar
 
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/hewan.png)
+### Data Preprocessing
+
+**Split Dataset**
+Dataset dipisah ke folder train dan test lalu gabung ke dalam folder dataset yang baru untuk memudahkan dalam klasifikasi tiap hewan.
+
+**Plot Gambar Hewan untuk Semua Kelas**
+
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/plothewan.png)
 
 **Plot Distribusi Untuk Semua Kelas**
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/grafik.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/plotkelas.png)
 ---
 
 ### Exploratory Data Analysis (EDA)
@@ -56,19 +67,19 @@ Dataset yang digunakan merupakan data gambar hewan: dogs, cats, snakes dengan at
 #### Data Augmentasi
 
 transformations = {
-    'rotate anticlockwise': anticlockwise_rotation,
-    'rotate clockwise': clockwise_rotation,
-    'warp shift': warp_shift,
-    'blurring image': blur_image,
-    'add brightness': add_brightness,
-    'flip up down': flip_up_down,
-    'shear image': sheared
+    'rotate anticlockwise': anticlockwise_rotation, Berfungsi: (Memutar gambar berlawanan arah jarum jam)
+    'rotate clockwise': clockwise_rotation, Berfungsi: (Memutar gambar searah jarum jam)
+    'warp shift': warp_shift, Berfungsi: (Melakukan pergeseran bentuk secara tidak merata (distorsi))
+    'blurring image': blur_image, Berfungsi: (Mengaburkan gambar untuk mensimulasikan noise kamera atau gerakan (motion blur))
+    'add brightness': add_brightness, Berfungsi: (Meningkatkan pencahayaan gambar)
+    'flip up down': flip_up_down, Berfungsi: (Membalik gambar secara vertikal)
+    'shear image': sheared Berfungsi: (Menggeser bagian atas/bawah gambar ke samping secara diagonal (shear transform))
 
 - Proses augmentasi berguna untuk memproses gambar agar memudahkan dalam proses analisa
 
 Lalu kita akan memisahkan data asli dengan data yang telah di augmentasi
 
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/distribusi.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/augmentasi.png)
 
 
 ---
@@ -143,66 +154,111 @@ Found 720 images belonging to 3 classes.
 Dua model machine learning yang digunakan:
 - **Conv2D**
 
-Dikarenakan uji coba modelling Conv2D, cukup rendah dengan nilai accuracy sekitar 0.6842, maka kita akan menggunakan transfer learning untuk meningkatkan nilai accuracy.
-accuracy: 0.6574 - loss: 0.6931 - val_accuracy: 0.6957 - val_loss: 0.6488
+**CNN Architecture Using 128 Neurons in Conv Layer**
+Penggunaan model Conv2D menggunakan Convolutional layer, Batch Normalization layer, and Pooling layer
+ - Total params: 6,387,331 (24.37 MB)
+ - Trainable params: 6,386,563 (24.36 MB)
+ - Non-trainable params: 768 (3.00 KB)
+
+ history_3 = model_3.fit(
+    train_generator,
+    epochs=30,
+    batch_size=32,
+    validation_data=validation_generator,
+    class_weight=class_weights
+)
+
+Setelah mencoba menguji modelling Conv2D, dengan epoch=30, didapatkan hasil yang kurang memuaskan.
+
+Dikarenakan uji coba modelling Conv2D, cukup rendah dengan nilai accuracy sekitar 0.5301, maka kita akan menggunakan transfer learning untuk meningkatkan nilai accuracy.
+accuracy: 0.5301 - loss: 0.9218 - val_accuracy: 0.4974 - val_loss: 0.9357
+
 
 - **Transfer Learning**
 
-Dari uji coba modelling Transfer Learning, terlihat nilai accuracy meningkat sampai 0,9121.
-accuracy: 0.9121 - loss: 0.1624 - val_accuracy: 0.9583 - val_loss: 0.2578
+Oleh sebab itu, kita akan menggunakan model Transfer Learning.
+
+Transfer Learning merupakan teknik menggunakan model deep learning yang sudah dilatih sebelumnya (seperti MobileNetV2) pada dataset besar seperti ImageNet, lalu menyesuaikannya (fine-tuning) untuk klasifikasi seperti hewan yang spesifik.
+
+Pada uji coba model ini akan menggunakan Convolutional layer, Batch Normalization layer, and Pooling layer yang dibungkus oleh model transfer learning.
+
+model = Sequential([
+    Input(shape=(150, 150, 3)),
+
+    # Pre-trained MobileNetV2 sebagai feature extractor
+    MobileNetV2(include_top=False, weights='imagenet', input_shape=(150, 150, 3)),
+
+    # Tambahan Conv2D dan MaxPooling setelah MobileNetV2
+    Conv2D(32, (3, 3), activation='relu', padding='same'),
+    MaxPooling2D((2, 2)),
+
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dropout(0.5),
+    Dense(3, activation='softmax')
+])
+
+ Total params: 2,643,555 (10.08 MB)
+ Trainable params: 2,609,443 (9.95 MB)
+ Non-trainable params: 34,112 (133.25 KB)
+
+Dari uji coba modelling Transfer Learning, terlihat nilai accuracy meningkat sampai 0,9270.
+
+accuracy: 0.9270 - loss: 0.1389 - val_accuracy: 0.9513 - val_loss: 0.2487
 
 ---
 
 ## Evaluation
 
-### Metrik Evaluasi
+### Plot Accuracy dan Loss pada Conv2D
 
 **Conv2D**
 
 Visual Accuracy
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/visual%20acc.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/acc2d.png)
 
 Visual Loss
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/gambar-visual.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/loss2d.png)
 
 Visual Correlation Matrix
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrix%20conv.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrix2d.png)
 
 Classification Report:
-
               precision    recall  f1-score   support
 
-        cats     0.6174    0.6017    0.6094       236
-        dogs     0.7484    0.4779    0.5833       249
-      snakes     0.6254    0.8809    0.7314       235
+        cats     1.0000    0.0077    0.0153       260
+        dogs     0.3986    0.9569    0.5627       232
+      snakes     0.9068    0.6404    0.7506       228
 
-    accuracy                         0.6500       720
-   macro avg     0.6637    0.6535    0.6414       720
-weighted avg     0.6653    0.6500    0.6402       720
+    accuracy                         0.5139       720
+   macro avg     0.7685    0.5350    0.4429       720
+weighted avg     0.7767    0.5139    0.4245       720
 
 ---
+### Plot Accuracy dan Loss pada Transfer Learning
+
 **Transfer Learning**
 
 Visual Accuracy
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/acc%20tf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/acctf.png)
 
 Visual Loss
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/loss%20tf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/losstf.png)
 
 Visual Correlation Matrix
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrix%20tf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrixtf.png)
 
 Classification Report:
 
               precision    recall  f1-score   support
 
-        cats     0.9170    0.8898    0.9032       236
-        dogs     0.8509    0.9398    0.8931       249
-      snakes     0.9907    0.9106    0.9490       235
+        cats     0.9664    0.8846    0.9237       260
+        dogs     0.9524    0.8621    0.9050       232
+      snakes     0.8382    1.0000    0.9120       228
 
     accuracy                         0.9139       720
-   macro avg     0.9196    0.9134    0.9151       720
-weighted avg     0.9182    0.9139    0.9147       720
+   macro avg     0.9190    0.9156    0.9136       720
+weighted avg     0.9213    0.9139    0.9140       720
 
 
 ---
@@ -212,32 +268,35 @@ weighted avg     0.9182    0.9139    0.9147       720
 
 Evaluasi Akurasi Prediksi:
 
-Dengan modelling Conv2D awalnya mendapat accuracy yang cukup rendah, tetapi saat menggunakan pendekatan transfer learning, nilai accuracy meningkat menjadi 0.9121
+Dengan modelling Conv2D awalnya mendapat accuracy yang cukup rendah, tetapi saat menggunakan pendekatan transfer learning, nilai rata-rata accuracy meningkat menjadi 0.9139 (Hasil epoch terakhir bernilai 0.9270)
 
 - Conv2D
 
-accuracy: 0.6574 - loss: 0.6931 - val_accuracy: 0.6957 - val_loss: 0.6488
+accuracy: 0.5301 - loss: 0.9218 - val_accuracy: 0.4974 - val_loss: 0.9357
 
 - Transfer Learning
 
-accuracy: 0.9121 - loss: 0.1624 - val_accuracy: 0.9583 - val_loss: 0.2578
+accuracy: 0.9270 - loss: 0.1389 - val_accuracy: 0.9513 - val_loss: 0.2487
 
 
 ---
 
 ### Konversi Model
 
-- Format SavedModel
-- Format TFJS
-- Format TF-Lite
+Model akan di konversi ke dalam tiga jenis format. 
 
-Kemudian hasil konversi akan disimpan ke dalam folder files.download('koko_model_all.zip')
+- Format SavedModel (Format default TensorFlow untuk menyimpan model lengkap dan deployment di server/Cloud )
+- Format TFJS (Diperlukan untuk deployment ke web apps (running di browser tanpa server))
+- Format TF-Lite (Format model TensorFlow yang dikompresi dan dioptimalkan untuk perangkat mobile atau embedded)
+
+Opsional: Kemudian hasil konversi akan disimpan ke dalam folder files.download('koko_model_all.zip')
+Berfungsi untuk mendownload model
 
 ---
 
 ### Inference
 
-Hasil inference diuji menggunakan website
+Hasil inference bertujuan untuk  uji coba prediksi model menggunakan website.
 
 ![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/inference.png)
 
