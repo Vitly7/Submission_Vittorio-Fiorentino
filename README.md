@@ -56,10 +56,11 @@ Dataset dipisah ke folder train dan test lalu gabung ke dalam folder dataset yan
 
 **Plot Gambar Hewan untuk Semua Kelas**
 
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/plothewan.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/plothewan.png)
 
 **Plot Distribusi Untuk Semua Kelas**
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/plotkelas.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/plotkelas.png)
+
 ---
 
 ### Exploratory Data Analysis (EDA)
@@ -79,7 +80,7 @@ transformations = {
 
 Lalu kita akan memisahkan data asli dengan data yang telah di augmentasi
 
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/augmentasi.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/augmentasi.png)
 
 
 ---
@@ -215,13 +216,13 @@ accuracy: 0.9270 - loss: 0.1389 - val_accuracy: 0.9513 - val_loss: 0.2487
 **Conv2D**
 
 Visual Accuracy
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/acc2d.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/acc2d.png)
 
 Visual Loss
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/loss2d.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/loss2d.png)
 
 Visual Correlation Matrix
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrix2d.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/matrix2d.png)
 
 Classification Report:
               precision    recall  f1-score   support
@@ -240,13 +241,13 @@ weighted avg     0.7767    0.5139    0.4245       720
 **Transfer Learning**
 
 Visual Accuracy
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/acctf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/acctf.png)
 
 Visual Loss
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/losstf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/losstf.png)
 
 Visual Correlation Matrix
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/matrixtf.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/matrixtf.png)
 
 Classification Report:
 
@@ -298,5 +299,5 @@ Berfungsi untuk mendownload model
 
 Hasil inference bertujuan untuk  uji coba prediksi model menggunakan website.
 
-![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/382a5a331f67b927565902ee759e16d131234da0/Gambar/inference.png)
+![ss4](https://github.com/Vitly7/Submission_Vittorio-Fiorentino/blob/75c7946dc8d1f05975738757bafbd7923a2cdca9/Gambar/inference.png)
 
